@@ -55,49 +55,54 @@ image_name_with_ext = split_path[-1]
 image_name = image_name_with_ext.split(".")
 image_name = " ".join(image_name[:-1])
 
-with Image.open(image_path).convert("RGBA") as original_image:
-    #find all fully transparent pixels
-    alpha_mask = original_image.split()[3]
-    alpha_mask = Image.eval(alpha_mask, lambda a: 255 if a == 0 else 0)
+try:
+    with Image.open(image_path).convert("RGBA") as original_image:
+        #find all fully transparent pixels
+        alpha_mask = original_image.split()[3]
+        alpha_mask = Image.eval(alpha_mask, lambda a: 255 if a == 0 else 0)
 
-    #convert from RGBA to RGB and dither
-    original_image = original_image.convert('RGB')
-    palette = hitherdither.palette.Palette(palette)
+        #convert from RGBA to RGB and dither
+        original_image = original_image.convert('RGB')
+        palette = hitherdither.palette.Palette(palette)
 
-    dithered_image = None
+        dithered_image = None
 
-    if dither_type == "bayer" or dither_type == "b":
-        options = [threshold, order]
-        print("Dithering {name} with bayer dithering. Palette: {p} Threshold: {t} Order: {o}".format(
-        name=image_name_with_ext, p=args["palette"], t=threshold, o=order))
-        dithered_image = hitherdither.ordered.bayer.bayer_dithering(original_image, palette, threshold, order)
-    elif dither_type == "yliluoma" or dither_type == "y":
-        options = [order]
-        print("Dithering {name} with yliluoma dithering. Palette: {p} Order: {o}".format(
-        name=image_name_with_ext, p=args["palette"], o=order))
-        dithered_image = hitherdither.ordered.yliluoma.yliluomas_1_ordered_dithering(original_image, palette, order)
-    elif dither_type == "cluster-dot" or dither_type == "cd":
-        options = [threshold, order]
-        print("Dithering {name} with cluster dot dithering. Palette: {p} Threshold: {t} Order: {o}".format(
-        name=image_name_with_ext, p=args["palette"], t=threshold, o=order))
-        dithered_image = hitherdither.ordered.cluster.cluster_dot_dithering(original_image, palette, threshold, order)
-    elif dither_type == "floyd-steinberg" or dither_type == "fs":
-        options = [order]
-        print("Dithering {name} with floyd steinberg dithering. Palette: {p} Order: {o}".format(
-        name=image_name_with_ext, p=args["palette"], o=order))
-        dithered_image = dithered_image = hitherdither.diffusion.error_diffusion_dithering(original_image, palette, "floyd-steinberg", order)
-    elif dither_type == "jarvis-judice-ninke" or dither_type == "jjn":
-        options = [order]
-        print("Dithering {name} with jarvis judice ninke dithering. Palette: {p} Order: {o}".format(
-        name=image_name_with_ext, p=args["palette"], o=order))
-        dithered_image = dithered_image = hitherdither.diffusion.error_diffusion_dithering(original_image, palette, "jarvis-judice-ninke", order)
-    else:
-        sys.exit("That dithering algorithm is not implemented.")
+        if dither_type == "bayer" or dither_type == "b":
+            options = [threshold, order]
+            print("Dithering {name} with bayer dithering. Palette: {p} Threshold: {t} Order: {o}".format(
+            name=image_name_with_ext, p=args["palette"], t=threshold, o=order))
+            dithered_image = hitherdither.ordered.bayer.bayer_dithering(original_image, palette, threshold, order)
+        elif dither_type == "yliluoma" or dither_type == "y":
+            options = [order]
+            print("Dithering {name} with yliluoma dithering. Palette: {p} Order: {o}".format(
+            name=image_name_with_ext, p=args["palette"], o=order))
+            dithered_image = hitherdither.ordered.yliluoma.yliluomas_1_ordered_dithering(original_image, palette, order)
+        elif dither_type == "cluster-dot" or dither_type == "cd":
+            options = [threshold, order]
+            print("Dithering {name} with cluster dot dithering. Palette: {p} Threshold: {t} Order: {o}".format(
+            name=image_name_with_ext, p=args["palette"], t=threshold, o=order))
+            dithered_image = hitherdither.ordered.cluster.cluster_dot_dithering(original_image, palette, threshold, order)
+        elif dither_type == "floyd-steinberg" or dither_type == "fs":
+            options = [order]
+            print("Dithering {name} with floyd steinberg dithering. Palette: {p} Order: {o}".format(
+            name=image_name_with_ext, p=args["palette"], o=order))
+            dithered_image = dithered_image = hitherdither.diffusion.error_diffusion_dithering(original_image, palette, "floyd-steinberg", order)
+        elif dither_type == "jarvis-judice-ninke" or dither_type == "jjn":
+            options = [order]
+            print("Dithering {name} with jarvis judice ninke dithering. Palette: {p} Order: {o}".format(
+            name=image_name_with_ext, p=args["palette"], o=order))
+            dithered_image = dithered_image = hitherdither.diffusion.error_diffusion_dithering(original_image, palette, "jarvis-judice-ninke", order)
+        else:
+            sys.exit("That dithering algorithm is not implemented.")
 
-    #put transparency back in
-    dithered_image = Image.composite(Image.new('RGBA', original_image.size, (0, 0, 0, 0)), dithered_image.convert('RGBA'), alpha_mask)
-    dithered_image.save("./output/{}_{}_{}_{}.png".format(image_name, dither_type, args["palette"], options))
-    #time formatting
-    finish = datetime.now()
-    delta = finish - start
-    print("Dithering completed in {}, closing!".format(str(delta)[:10]))
+        #put transparency back in
+        dithered_image = Image.composite(Image.new('RGBA', original_image.size, (0, 0, 0, 0)), dithered_image.convert('RGBA'), alpha_mask)
+        dithered_image.save("./output/{}_{}_{}_{}.png".format(image_name, dither_type, args["palette"], options))
+        #time formatting
+        finish = datetime.now()
+        delta = finish - start
+        print("Dithering completed in {}, closing!".format(str(delta)[:10]))
+except IOError:
+    sys.exit("File not found")
+except:
+    sys.exit("Unknown error, please make an issue on my github page describing in detail what you entered and I will do my best to fix this :)")
