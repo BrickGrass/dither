@@ -5,6 +5,7 @@ import sys
 from datetime import datetime, timedelta
 import time
 from yaspin import yaspin
+import os
 
 import palettes
 
@@ -47,15 +48,10 @@ except:
 threshold = args["threshold"]
 order = args["order"]
 
-#extract the filename from the path
-split_path = [image_path]
-if "/" in image_path:
-    split_path = image_path.split("/")
-if "\\" in image_path:
-    split_path = image_path.split("\\")
-image_name_with_ext = split_path[-1]
-#get rid of the extension (.png etc)
-image_name = image_name_with_ext.split(".")
+# extract the filename from the path
+filename = os.path.basename(image_path)
+# get rid of the extension (.png etc)
+image_name = filename.split(".")
 image_name = " ".join(image_name[:-1])
 
 try:
@@ -73,7 +69,7 @@ try:
         if dither_type == "bayer" or dither_type == "b":
             options = [threshold, order]
             text = "Dithering {name} with bayer dithering. Palette: {p} Threshold: {t} Order: {o}".format(
-            name=image_name_with_ext, p=args["palette"], t=threshold, o=order)
+            name=filename, p=args["palette"], t=threshold, o=order)
             # Pop a spinner in so you can see it's working
             with yaspin(text=text) as sp:
                 dithered_image = hitherdither.ordered.bayer.bayer_dithering(original_image, palette, threshold, order)
@@ -82,7 +78,7 @@ try:
         elif dither_type == "yliluoma" or dither_type == "y":
             options = [order]
             text = "Dithering {name} with yliluoma dithering. Palette: {p} Order: {o}".format(
-            name=image_name_with_ext, p=args["palette"], o=order)
+            name=filename, p=args["palette"], o=order)
             # Pop a spinner in so you can see it's working
             with yaspin(text=text) as sp:
                 dithered_image = hitherdither.ordered.yliluoma.yliluomas_1_ordered_dithering(original_image, palette, order)
@@ -91,7 +87,7 @@ try:
         elif dither_type == "cluster-dot" or dither_type == "cd":
             options = [threshold, order]
             text = "Dithering {name} with cluster dot dithering. Palette: {p} Threshold: {t} Order: {o}".format(
-            name=image_name_with_ext, p=args["palette"], t=threshold, o=order)
+            name=filename, p=args["palette"], t=threshold, o=order)
             # Pop a spinner in so you can see it's working
             with yaspin(text=text) as sp:
                 dithered_image = hitherdither.ordered.cluster.cluster_dot_dithering(original_image, palette, threshold, order)
@@ -100,7 +96,7 @@ try:
         elif dither_type == "floyd-steinberg" or dither_type == "fs":
             options = [order]
             text = "Dithering {name} with floyd steinberg dithering. Palette: {p} Order: {o}".format(
-            name=image_name_with_ext, p=args["palette"], o=order)
+            name=filename, p=args["palette"], o=order)
             # Pop a spinner in so you can see it's working
             with yaspin(text=text) as sp:
                 dithered_image = dithered_image = hitherdither.diffusion.error_diffusion_dithering(original_image, palette, "floyd-steinberg", order)
@@ -109,7 +105,7 @@ try:
         elif dither_type == "jarvis-judice-ninke" or dither_type == "jjn":
             options = [order]
             text = "Dithering {name} with jarvis judice ninke dithering. Palette: {p} Order: {o}".format(
-            name=image_name_with_ext, p=args["palette"], o=order)
+            name=filename, p=args["palette"], o=order)
             # Pop a spinner in so you can see it's working
             with yaspin(text=text) as sp:
                 dithered_image = dithered_image = hitherdither.diffusion.error_diffusion_dithering(original_image, palette, "jarvis-judice-ninke", order)
@@ -127,6 +123,6 @@ try:
         print("Dithering completed in {}, closing!".format(str(delta)[:10]))
 except IOError:
     sys.exit("File not found")
-#except Exception as err:
-#    print("\nUnknown Error! Please contact me on github with the information below, and I will do my best to fix whatever bug you are having.\n")
-#    sys.exit(err)
+except Exception as err:
+    print("\nUnknown Error! Please contact me on github with the information below, and I will do my best to fix whatever bug you are having.\n")
+    sys.exit(err)
