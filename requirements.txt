@@ -1,2 +1,3 @@
 git+https://www.github.com/hbldh/hitherdither
 pillow
+yaspin
