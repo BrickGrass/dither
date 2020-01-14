@@ -23,7 +23,7 @@ Example:
 
 ## Dither
 **-d** or **--dither** </br>
-The name of the dithering algorithm you wish to use.
+The name of the dithering algorithm you wish to use. The default will be bayer dithering.
 Available choices:
 1. **bayer** or **b**
 2. **yliluoma** or **y**
@@ -36,7 +36,7 @@ Example:
 
 ## Palette
 **-p** or **--palette** </br>
-Name of the palette you wish to dither with. If you want to add more palettes, add them to the palettes.py file as a list of rgb tuples, and then go into dither.py and edit the choices of this arg to include the name that you give to your list.
+Name of the palette you wish to dither with. The default palette is geo32. If you want to add more palettes, add them to the palettes.py file as a list of rgb tuples, and then go into dither.py and edit the choices of this arg to include the name that you give to your list.
 Available choices:
 1. **geo32**
 2. **dawnbringer16**
@@ -47,8 +47,26 @@ Available choices:
 Example:
 `python dither.py -i /home/username/Pictures/myverycoolimage.jpg -p geo32`
 
-# TODO: document order and threshold better lol
-  -t {2,4,8,16,32,64,128,256,512}, --threshold {2,4,8,16,32,64,128,256,512}
-                        The threshold value you want to use for dithering.
-  -o {2,4,8,16,32}, --order {2,4,8,16,32}
-                        The order value you want to use for dithering.
+## Threshold
+**-t** or **--threshold** </br>
+The threshold value you want to use for dithering. The default value is 128. Not all of these dithering algorithms take a threshold value as an argument.
+Available choices:
+1. 2
+2. 4
+3. 8
+4. 16
+5. 32
+6. 64
+7. 128
+8. 256
+9. 512
+
+## Order
+**-o** or **--order** </br>
+The order value you want to use for dithering. The default value is 8.
+Available choices:
+1. 2
+2. 4
+3. 8
+4. 16
+5. 32
