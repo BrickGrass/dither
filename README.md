@@ -51,22 +51,22 @@ Example:
 **-t** or **--threshold** </br>
 The threshold value you want to use for dithering. The default value is 128. Not all of these dithering algorithms take a threshold value as an argument. </br>
 Available choices:
-1. 2
-2. 4
-3. 8
-4. 16
-5. 32
-6. 64
-7. 128
-8. 256
-9. 512
+1. **2**
+2. **4**
+3. **8**
+4. **16**
+5. **32**
+6. **64**
+7. **128**
+8. **256**
+9. **512**
 
 ## Order
 **-o** or **--order** </br>
 The order value you want to use for dithering. The default value is 8. </br>
 Available choices:
-1. 2
-2. 4
-3. 8
-4. 16
-5. 32
+1. **2**
+2. **4**
+3. **8**
+4. **16**
+5. **32**
