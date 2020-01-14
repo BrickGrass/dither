@@ -104,5 +104,6 @@ try:
         print("Dithering completed in {}, closing!".format(str(delta)[:10]))
 except IOError:
     sys.exit("File not found")
-except:
-    sys.exit("Unknown error, please make an issue on my github page describing in detail what you entered and I will do my best to fix this :)")
+except Exception as err:
+    print("\nUnknown Error! Please contact me on github with the information below, and I will do my best to fix whatever bug you are having.\n")
+    sys.exit(err)
