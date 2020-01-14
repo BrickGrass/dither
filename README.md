@@ -6,7 +6,7 @@ This is a command line interface for dithering images using the [hitherdither](h
 3. Use pip to install the requirements from requirements.txt, the command `pip install -r requirements.txt` should work
 4. Now run `python dither.py --help` to show all the options available
 
-# Arguments
+# Arguments:
 
 ## Image
 **-i** or **--image** </br>
