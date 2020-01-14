@@ -1,4 +1,4 @@
-This is a command line interface for dithering images using the hitherdither library.
+This is a command line interface for dithering images using the [hitherdither](https://github.com/hbldh/hitherdither) library.
 
 # Setup:
 1. Install python3
