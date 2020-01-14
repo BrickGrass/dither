@@ -34,6 +34,8 @@ Available choices:
 Example:
 `python dither.py --image input/mycoolimage.png -d yliluoma`
 
+![alt text](https://i.imgur.com/RXuE64I.png, "A comparison of the dithers available in this program")
+
 ## Palette
 **-p** or **--palette** </br>
 Name of the palette you wish to dither with. The default palette is geo32. If you want to add more palettes, add them to the palettes.py file as a list of rgb tuples, and then go into dither.py and edit the choices of this arg to include the name that you give to your list. </br>
