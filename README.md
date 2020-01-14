@@ -15,14 +15,14 @@ to say:
 # Arguments
 
 ## Image
-**-i** or **--image**
+**-i** or **--image**\n
 Path to the image you wish to dither. If you do not give the absolute path, it must be either within the same folder as this script or a subfolder. This command is the only one that is always required.
 
 Example:
 `python dither.py -i myimage.png`
 
 ## Dither
-**-d** or **--dither**
+**-d** or **--dither**\n
 The name of the dithering algorithm you wish to use.
 Available choices:
 1. **bayer** or **b**
@@ -35,7 +35,7 @@ Example:
 `python dither.py --image input/mycoolimage.png -d yliluoma`
 
 ## Palette
-**-p** or **--palette**
+**-p** or **--palette**\n
 Name of the palette you wish to dither with. If you want to add more palettes, add them to the palettes.py file as a list of rgb tuples, and then go into dither.py and edit the choices of this arg to include the name that you give to your list.
 Available choices:
 1. **geo32**
