@@ -48,9 +48,11 @@ threshold = args["threshold"]
 order = args["order"]
 
 #extract the filename from the path
-#TODO: check if this will work on windows systems what with the \ thing they have, maybe see about checking for that
-#via os lib
-split_path = image_path.split("/")
+split_path = [image_path]
+if "/" in image_path:
+    split_path = image_path.split("/")
+if "\\" in image_path:
+    split_path = image_path.split("\\")
 image_name_with_ext = split_path[-1]
 #get rid of the extension (.png etc)
 image_name = image_name_with_ext.split(".")
