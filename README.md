@@ -15,7 +15,7 @@ to say:
 # Arguments
 
 ## Image
-**-i** or **--image**\n
+**-i** or **--image** </br>
 Path to the image you wish to dither. If you do not give the absolute path, it must be either within the same folder as this script or a subfolder. This command is the only one that is always required.
 
 Example:
