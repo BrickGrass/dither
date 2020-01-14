@@ -22,7 +22,7 @@ Example:
 `python dither.py -i myimage.png`
 
 ## Dither
-**-d** or **--dither**\n
+**-d** or **--dither** </br>
 The name of the dithering algorithm you wish to use.
 Available choices:
 1. **bayer** or **b**
@@ -35,7 +35,7 @@ Example:
 `python dither.py --image input/mycoolimage.png -d yliluoma`
 
 ## Palette
-**-p** or **--palette**\n
+**-p** or **--palette** </br>
 Name of the palette you wish to dither with. If you want to add more palettes, add them to the palettes.py file as a list of rgb tuples, and then go into dither.py and edit the choices of this arg to include the name that you give to your list.
 Available choices:
 1. **geo32**
@@ -52,4 +52,3 @@ Example:
                         The threshold value you want to use for dithering.
   -o {2,4,8,16,32}, --order {2,4,8,16,32}
                         The order value you want to use for dithering.
-
