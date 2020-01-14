@@ -12,16 +12,27 @@ start = datetime.now()
 # Defining all command line arguments that can be used
 parser = argparse.ArgumentParser(
     description = "Dithers images using various dithering algorithms.")
-parser.add_argument("-i", "--image", required=True,
+parser.add_argument("-i", "--image",
+    required=True,
     help="Path to the image you wish to dither. If you do not give the absolute path, it must be either within the same folder as this script or a subfolder.")
 parser.add_argument("-d", "--dither",
-    help="The name of the dithering algorithm you wish to use.", default="bayer")
-parser.add_argument("-p", "--palette", default="geo32",
-    help="Name of the palette you wish to dither with.")
-parser.add_argument("-t", "--threshold", default=256, choices=[2, 4, 8, 16, 32, 64, 128, 256, 512],
-    help="The threshold value you want to use for dithering.", type=int)
-parser.add_argument("-o", "--order", default=8, choices=[2, 4, 8, 16, 32],
-    help="The order value you want to use for dithering.", type=int)
+    help="The name of the dithering algorithm you wish to use.",
+    default="bayer",
+    choices=["bayer", "b", "yliluoma", "y", "cluster-dot", "cd", "floyd-steinberg", "fs", "jarvis-judice-ninke", "jjn"])
+parser.add_argument("-p", "--palette",
+    default="geo32",
+    help="Name of the palette you wish to dither with.",
+    choices=["geo32", "dawnbringer16", "pixelcanvas", "pixelzone", "pxlsspace"])
+parser.add_argument("-t", "--threshold",
+    default=256,
+    choices=[2, 4, 8, 16, 32, 64, 128, 256, 512],
+    help="The threshold value you want to use for dithering.",
+    type=int)
+parser.add_argument("-o", "--order",
+    default=8,
+    choices=[2, 4, 8, 16, 32],
+    help="The order value you want to use for dithering.",
+    type=int)
 
 # Getting the user input/default values from the arguments
 args = vars(parser.parse_args())
