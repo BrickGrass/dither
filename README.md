@@ -66,3 +66,11 @@ Available choices:
 3. **8**
 4. **16**
 5. **32**
+
+## Exclude
+**-e** or **--exclude** </br>
+The colours that you do not want to use from whichever palette you are using. The default value is 0, which removes no colours. To see which number corresponds to each palette's colours, look in palettes.py. </br>
+
+Example:
+`python dither.py -i input/myverycoolimage.png -p geo32 -e 5 8 89`
+Here the colours 5 and 8 would not be used in dithering, and the input 89 would be ignored, as it isn't a valid colour number.
