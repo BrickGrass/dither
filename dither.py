@@ -35,6 +35,10 @@ parser.add_argument("-o", "--order",
     choices=[2, 4, 8, 16, 32],
     help="The order value you want to use for dithering.",
     type=int)
+parser.add_argument("-e", "--exclude",
+    help="Exclude colours from a palette, so you can use all but those specified of a palette's colours if you wish.",
+    default=[0],
+    nargs="*")
 
 # Getting the user input/default values from the arguments
 args = vars(parser.parse_args())
@@ -42,11 +46,27 @@ args = vars(parser.parse_args())
 image_path = args["image"]
 dither_type = args["dither"]
 try:
-    palette = getattr(palettes, args["palette"])
+    dict_palette = getattr(palettes, args["palette"])
 except:
     sys.exit("Not a valid palette. See palettes.py for the available options and to add more.")
 threshold = args["threshold"]
 order = args["order"]
+exclude = args["exclude"]
+
+exclude = list(set(exclude)) # Remove dupes
+exclude.sort() # Sort again
+
+# Remove excluded values from the palette
+for e_colour in exclude:
+    if e_colour != 0:
+        try:
+            del dict_palette[e_colour]
+        except KeyError:
+            print(f"The colour {e_colour} does not exist in this palette, ignoring.")
+
+palette = []
+for key, value in dict_palette.items():
+    palette.append(value)
 
 # extract the filename from the path
 filename = os.path.basename(image_path)
@@ -70,6 +90,8 @@ try:
             options = [threshold, order]
             text = "Dithering {name} with bayer dithering. Palette: {p} Threshold: {t} Order: {o}".format(
             name=filename, p=args["palette"], t=threshold, o=order)
+            if exclude != [0]:
+                text = text + ". Excluded colours: {}".format(exclude)
             # Pop a spinner in so you can see it's working
             with yaspin(text=text) as sp:
                 dithered_image = hitherdither.ordered.bayer.bayer_dithering(original_image, palette, threshold, order)
@@ -79,6 +101,8 @@ try:
             options = [order]
             text = "Dithering {name} with yliluoma dithering. Palette: {p} Order: {o}".format(
             name=filename, p=args["palette"], o=order)
+            if exclude != [0]:
+                text = text + ". Excluded colours: {}".format(exclude)
             # Pop a spinner in so you can see it's working
             with yaspin(text=text) as sp:
                 dithered_image = hitherdither.ordered.yliluoma.yliluomas_1_ordered_dithering(original_image, palette, order)
@@ -88,6 +112,8 @@ try:
             options = [threshold, order]
             text = "Dithering {name} with cluster dot dithering. Palette: {p} Threshold: {t} Order: {o}".format(
             name=filename, p=args["palette"], t=threshold, o=order)
+            if exclude != [0]:
+                text = text + ". Excluded colours: {}".format(exclude)
             # Pop a spinner in so you can see it's working
             with yaspin(text=text) as sp:
                 dithered_image = hitherdither.ordered.cluster.cluster_dot_dithering(original_image, palette, threshold, order)
@@ -97,6 +123,8 @@ try:
             options = [order]
             text = "Dithering {name} with floyd steinberg dithering. Palette: {p} Order: {o}".format(
             name=filename, p=args["palette"], o=order)
+            if exclude != [0]:
+                text = text + ". Excluded colours: {}".format(exclude)
             # Pop a spinner in so you can see it's working
             with yaspin(text=text) as sp:
                 dithered_image = dithered_image = hitherdither.diffusion.error_diffusion_dithering(original_image, palette, "floyd-steinberg", order)
@@ -106,6 +134,8 @@ try:
             options = [order]
             text = "Dithering {name} with jarvis judice ninke dithering. Palette: {p} Order: {o}".format(
             name=filename, p=args["palette"], o=order)
+            if exclude != [0]:
+                text = text + ". Excluded colours: {}".format(exclude)
             # Pop a spinner in so you can see it's working
             with yaspin(text=text) as sp:
                 dithered_image = dithered_image = hitherdither.diffusion.error_diffusion_dithering(original_image, palette, "jarvis-judice-ninke", order)
@@ -116,7 +146,12 @@ try:
 
         #put transparency back in
         dithered_image = Image.composite(Image.new('RGBA', original_image.size, (0, 0, 0, 0)), dithered_image.convert('RGBA'), alpha_mask)
-        dithered_image.save("./output/{}_{}_{}_{}.png".format(image_name, dither_type, args["palette"], options))
+        if exclude == [0]:
+            p = args["palette"]
+            dithered_image.save(f"./output/{image_name}_{dither_type}_{p}_{options}.png")
+        else:
+            p = args["palette"]
+            dithered_image.save(f"./output/{image_name}_{dither_type}_{p}_Excluded:{exclude}_{options}.png")
         #time formatting
         finish = datetime.now()
         delta = finish - start
